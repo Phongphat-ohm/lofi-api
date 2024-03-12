@@ -82,6 +82,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -105,6 +108,11 @@ exports.Prisma.SongHistoriesScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
@@ -154,17 +162,18 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": null,
-        "value": "file:../src/data/database.db"
+        "value": "postgres://lofiapp_user:Y7Q3X9zVWcstmChX5bXvC4Vh2YsFnb0R@dpg-cno62s821fec73aso2fg-a.singapore-postgres.render.com/lofiapp"
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output = \"./generate/client\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = \"file:../src/data/database.db\"\n}\n\nmodel Users {\n  id            Int             @id @unique @default(autoincrement())\n  provider      String          @default(\"credential\")\n  email         String          @unique\n  username      String          @unique\n  password      String\n  profile_url   String?\n  create_at     DateTime        @default(now())\n  SongHistories SongHistories[]\n}\n\nmodel SongHistories {\n  id        Int    @id @unique @default(autoincrement())\n  user_id   Int @unique\n  user      Users  @relation(fields: [user_id], references: [id])\n  song_name String?\n  time      Float?\n}\n",
-  "inlineSchemaHash": "d0e0424080b5a3deefab8dc50a3995b11d6c0ec1842521d10051190a13673d88",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generate/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgres://lofiapp_user:Y7Q3X9zVWcstmChX5bXvC4Vh2YsFnb0R@dpg-cno62s821fec73aso2fg-a.singapore-postgres.render.com/lofiapp\"\n}\n\nmodel Users {\n  id            Int             @id @unique @default(autoincrement())\n  provider      String          @default(\"credential\")\n  email         String          @unique\n  username      String          @unique\n  password      String\n  profile_url   String?\n  create_at     DateTime        @default(now())\n  SongHistories SongHistories[]\n}\n\nmodel SongHistories {\n  id        Int     @id @unique @default(autoincrement())\n  user_id   Int     @unique\n  user      Users   @relation(fields: [user_id], references: [id])\n  song_name String?\n  time      Float?\n}\n",
+  "inlineSchemaHash": "f56af23f8d91c4b565977d27bbe7135122d482443b524e21509156c13bd4e431",
   "copyEngine": true
 }
 

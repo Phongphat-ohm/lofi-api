@@ -6,12 +6,12 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "./generate/client"
+  output   = "./generate/client"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:../src/data/database.db"
+  provider = "postgresql"
+  url      = "postgres://lofiapp_user:Y7Q3X9zVWcstmChX5bXvC4Vh2YsFnb0R@dpg-cno62s821fec73aso2fg-a.singapore-postgres.render.com/lofiapp"
 }
 
 model Users {
@@ -26,9 +26,9 @@ model Users {
 }
 
 model SongHistories {
-  id        Int    @id @unique @default(autoincrement())
-  user_id   Int @unique
-  user      Users  @relation(fields: [user_id], references: [id])
+  id        Int     @id @unique @default(autoincrement())
+  user_id   Int     @unique
+  user      Users   @relation(fields: [user_id], references: [id])
   song_name String?
   time      Float?
 }
