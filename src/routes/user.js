@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require("@prisma/client")
+const { PrismaClient } = require("../../prisma/generate/client")
 const dotenv = require("dotenv").config();
 const { createHash } = require("crypto");
 const jwt = require("jsonwebtoken");
