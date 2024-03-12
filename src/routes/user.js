@@ -120,6 +120,12 @@ router.post("/signup", async (req, res) => {
             })
 
             if (create_user) {
+                const creat_song_history = await prisma.songHistories.create({
+                    data: {
+                        user_id: create_user.id
+                    }
+                })
+
                 response = {
                     s: 200,
                     m: "create user success"
@@ -152,8 +158,6 @@ router.get("/@me", async (req, res) => {
         const vertify_token = jwt.verify(token, process.env.SECURITY_KEY);
         const user_id = vertify_token.data.id;
 
-        console.log(vertify_token);
-
         const get_user = await prisma.users.findUnique({
             where: {
                 id: user_id
@@ -161,7 +165,8 @@ router.get("/@me", async (req, res) => {
             select: {
                 email: true,
                 username: true,
-                profile_url: true
+                profile_url: true,
+                SongHistories: true
             }
         })
 

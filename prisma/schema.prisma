@@ -27,8 +27,8 @@ model Users {
 
 model SongHistories {
   id        Int    @id @unique @default(autoincrement())
-  user_id   Int
+  user_id   Int @unique
   user      Users  @relation(fields: [user_id], references: [id])
-  song_name String
-  time      Float
+  song_name String?
+  time      Float?
 }

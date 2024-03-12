@@ -2112,8 +2112,8 @@ export namespace Prisma {
   export type SongHistoriesGroupByOutputType = {
     id: number
     user_id: number
-    song_name: string
-    time: number
+    song_name: string | null
+    time: number | null
     _count: SongHistoriesCountAggregateOutputType | null
     _avg: SongHistoriesAvgAggregateOutputType | null
     _sum: SongHistoriesSumAggregateOutputType | null
@@ -2163,8 +2163,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       user_id: number
-      song_name: string
-      time: number
+      song_name: string | null
+      time: number | null
     }, ExtArgs["result"]["songHistories"]>
     composites: {}
   }
@@ -3022,35 +3022,35 @@ export namespace Prisma {
     NOT?: SongHistoriesWhereInput | SongHistoriesWhereInput[]
     id?: IntFilter<"SongHistories"> | number
     user_id?: IntFilter<"SongHistories"> | number
-    song_name?: StringFilter<"SongHistories"> | string
-    time?: FloatFilter<"SongHistories"> | number
+    song_name?: StringNullableFilter<"SongHistories"> | string | null
+    time?: FloatNullableFilter<"SongHistories"> | number | null
     user?: XOR<UsersRelationFilter, UsersWhereInput>
   }
 
   export type SongHistoriesOrderByWithRelationInput = {
     id?: SortOrder
     user_id?: SortOrder
-    song_name?: SortOrder
-    time?: SortOrder
+    song_name?: SortOrderInput | SortOrder
+    time?: SortOrderInput | SortOrder
     user?: UsersOrderByWithRelationInput
   }
 
   export type SongHistoriesWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    user_id?: number
     AND?: SongHistoriesWhereInput | SongHistoriesWhereInput[]
     OR?: SongHistoriesWhereInput[]
     NOT?: SongHistoriesWhereInput | SongHistoriesWhereInput[]
-    user_id?: IntFilter<"SongHistories"> | number
-    song_name?: StringFilter<"SongHistories"> | string
-    time?: FloatFilter<"SongHistories"> | number
+    song_name?: StringNullableFilter<"SongHistories"> | string | null
+    time?: FloatNullableFilter<"SongHistories"> | number | null
     user?: XOR<UsersRelationFilter, UsersWhereInput>
-  }, "id" | "id">
+  }, "id" | "id" | "user_id">
 
   export type SongHistoriesOrderByWithAggregationInput = {
     id?: SortOrder
     user_id?: SortOrder
-    song_name?: SortOrder
-    time?: SortOrder
+    song_name?: SortOrderInput | SortOrder
+    time?: SortOrderInput | SortOrder
     _count?: SongHistoriesCountOrderByAggregateInput
     _avg?: SongHistoriesAvgOrderByAggregateInput
     _max?: SongHistoriesMaxOrderByAggregateInput
@@ -3064,8 +3064,8 @@ export namespace Prisma {
     NOT?: SongHistoriesScalarWhereWithAggregatesInput | SongHistoriesScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"SongHistories"> | number
     user_id?: IntWithAggregatesFilter<"SongHistories"> | number
-    song_name?: StringWithAggregatesFilter<"SongHistories"> | string
-    time?: FloatWithAggregatesFilter<"SongHistories"> | number
+    song_name?: StringNullableWithAggregatesFilter<"SongHistories"> | string | null
+    time?: FloatNullableWithAggregatesFilter<"SongHistories"> | number | null
   }
 
   export type UsersCreateInput = {
@@ -3130,41 +3130,41 @@ export namespace Prisma {
   }
 
   export type SongHistoriesCreateInput = {
-    song_name: string
-    time: number
+    song_name?: string | null
+    time?: number | null
     user: UsersCreateNestedOneWithoutSongHistoriesInput
   }
 
   export type SongHistoriesUncheckedCreateInput = {
     id?: number
     user_id: number
-    song_name: string
-    time: number
+    song_name?: string | null
+    time?: number | null
   }
 
   export type SongHistoriesUpdateInput = {
-    song_name?: StringFieldUpdateOperationsInput | string
-    time?: FloatFieldUpdateOperationsInput | number
+    song_name?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableFloatFieldUpdateOperationsInput | number | null
     user?: UsersUpdateOneRequiredWithoutSongHistoriesNestedInput
   }
 
   export type SongHistoriesUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: IntFieldUpdateOperationsInput | number
-    song_name?: StringFieldUpdateOperationsInput | string
-    time?: FloatFieldUpdateOperationsInput | number
+    song_name?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type SongHistoriesUpdateManyMutationInput = {
-    song_name?: StringFieldUpdateOperationsInput | string
-    time?: FloatFieldUpdateOperationsInput | number
+    song_name?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type SongHistoriesUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: IntFieldUpdateOperationsInput | number
-    song_name?: StringFieldUpdateOperationsInput | string
-    time?: FloatFieldUpdateOperationsInput | number
+    song_name?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -3334,15 +3334,15 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type UsersRelationFilter = {
@@ -3383,20 +3383,20 @@ export namespace Prisma {
     time?: SortOrder
   }
 
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type SongHistoriesCreateNestedManyWithoutUserInput = {
@@ -3463,8 +3463,8 @@ export namespace Prisma {
     connect?: UsersWhereUniqueInput
   }
 
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
@@ -3615,31 +3615,42 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type SongHistoriesCreateWithoutUserInput = {
-    song_name: string
-    time: number
+    song_name?: string | null
+    time?: number | null
   }
 
   export type SongHistoriesUncheckedCreateWithoutUserInput = {
     id?: number
-    song_name: string
-    time: number
+    song_name?: string | null
+    time?: number | null
   }
 
   export type SongHistoriesCreateOrConnectWithoutUserInput = {
@@ -3669,8 +3680,8 @@ export namespace Prisma {
     NOT?: SongHistoriesScalarWhereInput | SongHistoriesScalarWhereInput[]
     id?: IntFilter<"SongHistories"> | number
     user_id?: IntFilter<"SongHistories"> | number
-    song_name?: StringFilter<"SongHistories"> | string
-    time?: FloatFilter<"SongHistories"> | number
+    song_name?: StringNullableFilter<"SongHistories"> | string | null
+    time?: FloatNullableFilter<"SongHistories"> | number | null
   }
 
   export type UsersCreateWithoutSongHistoriesInput = {
@@ -3728,20 +3739,20 @@ export namespace Prisma {
   }
 
   export type SongHistoriesUpdateWithoutUserInput = {
-    song_name?: StringFieldUpdateOperationsInput | string
-    time?: FloatFieldUpdateOperationsInput | number
+    song_name?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type SongHistoriesUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    song_name?: StringFieldUpdateOperationsInput | string
-    time?: FloatFieldUpdateOperationsInput | number
+    song_name?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type SongHistoriesUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    song_name?: StringFieldUpdateOperationsInput | string
-    time?: FloatFieldUpdateOperationsInput | number
+    song_name?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
 
