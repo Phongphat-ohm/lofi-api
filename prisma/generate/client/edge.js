@@ -158,13 +158,13 @@ const config = {
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": "DATABASE_URL",
-        "value": null
+        "fromEnvVar": null,
+        "value": "file:../src/data/database.db"
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output = \"./generate/client\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Users {\n  id            Int             @id @unique @default(autoincrement())\n  provider      String          @default(\"credential\")\n  email         String          @unique\n  username      String          @unique\n  password      String\n  profile_url   String?\n  create_at     DateTime        @default(now())\n  SongHistories SongHistories[]\n}\n\nmodel SongHistories {\n  id        Int    @id @unique @default(autoincrement())\n  user_id   Int @unique\n  user      Users  @relation(fields: [user_id], references: [id])\n  song_name String?\n  time      Float?\n}\n",
-  "inlineSchemaHash": "3b6ae761ac3173ffde7c1a0ebcae7d03d0a89efd92eb9adaa8746b263fdfaa3c",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output = \"./generate/client\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = \"file:../src/data/database.db\"\n}\n\nmodel Users {\n  id            Int             @id @unique @default(autoincrement())\n  provider      String          @default(\"credential\")\n  email         String          @unique\n  username      String          @unique\n  password      String\n  profile_url   String?\n  create_at     DateTime        @default(now())\n  SongHistories SongHistories[]\n}\n\nmodel SongHistories {\n  id        Int    @id @unique @default(autoincrement())\n  user_id   Int @unique\n  user      Users  @relation(fields: [user_id], references: [id])\n  song_name String?\n  time      Float?\n}\n",
+  "inlineSchemaHash": "d0e0424080b5a3deefab8dc50a3995b11d6c0ec1842521d10051190a13673d88",
   "copyEngine": true
 }
 config.dirname = '/'
@@ -174,9 +174,7 @@ defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = undefined
 
 config.injectableEdgeEnv = () => ({
-  parsed: {
-    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
-  }
+  parsed: {}
 })
 
 if (typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined) {
