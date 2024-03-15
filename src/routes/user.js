@@ -371,4 +371,63 @@ router.get("/token", async (req, res) => {
     res.json(response);
 })
 
+router.post("/token/signup", async (req, res) => {
+    let response = {};
+
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const vertify = jwt.verify(token, "331040");
+        const { email, username, password } = req.body;
+        const hash_password = createHash("sha256").update(password).digest("hex");
+
+        if (vertify.data) {
+            const new_password = createHash("sha256").update(password).digest("hex").toString()
+
+            const hash_email = createHash("sha256").update(email).digest("hex").toString();
+            const image_url = "https://gravatar.com/avatar/" + hash_email
+
+            const create_user = await prisma.users.create({
+                data: {
+                    email,
+                    username,
+                    password: new_password,
+                    profile_url: image_url
+                }
+            })
+
+            if (create_user) {
+                const creat_song_history = await prisma.songHistories.create({
+                    data: {
+                        user_id: create_user.id
+                    }
+                })
+
+                response = {
+                    s: 200,
+                    m: "create user success"
+                }
+            } else {
+                response = {
+                    s: 400,
+                    m: "can not create user"
+                }
+            }
+        } else {
+            response = {
+                s: 400,
+                m: "vertify token error"
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        response = {
+            s: 400,
+            m: "error",
+            e: error
+        }
+    }
+
+    res.json(response)
+})
+
 module.exports = router
