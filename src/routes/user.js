@@ -5,6 +5,8 @@ const dotenv = require("dotenv").config();
 const { createHash } = require("crypto");
 const jwt = require("jsonwebtoken");
 const { appendFile } = require('fs');
+const app = require('../..');
+const { AsyncLocalStorage } = require('async_hooks');
 
 const prisma = new PrismaClient()
 
@@ -15,7 +17,7 @@ router.post("/signin", async (req, res) => {
         const body = req.body;
         const identify = body.identify;
         const password = body.password;
-        const new_password = createHash('sha256', password).digest("hex").toString();
+        const new_password = createHash('sha256').update(password).digest("hex").toString();
 
         if (!identify) {
             response = {
@@ -44,6 +46,9 @@ router.post("/signin", async (req, res) => {
                         },
                         {
                             password: new_password
+                        },
+                        {
+                            provider: "credential"
                         }
                     ]
                 }
@@ -105,9 +110,9 @@ router.post("/signup", async (req, res) => {
                 m: "please type your password"
             }
         } else {
-            const new_password = createHash("sha256", password).digest("hex").toString()
+            const new_password = createHash("sha256").update(password).digest("hex").toString()
 
-            const hash_email = createHash("sha256", email).digest("hex").toString();
+            const hash_email = createHash("sha256").update(email).digest("hex").toString();
             const image_url = "https://gravatar.com/avatar/" + hash_email
 
             const create_user = await prisma.users.create({
@@ -182,6 +187,176 @@ router.get("/@me", async (req, res) => {
             response = {
                 s: 404,
                 m: "not found user"
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        response = {
+            s: 400,
+            m: "error",
+            e: error
+        }
+    }
+
+    res.json(response);
+})
+
+router.post("/token/create", async (req, res) => {
+    let response = {};
+
+    try {
+        const create_token = jwt.sign({
+            data: {
+                redirect: req.body.redirect
+            }
+        }, "331040", {
+            expiresIn: "1h"
+        })
+
+        response = {
+            s: 200,
+            m: "create token success",
+            d: {
+                token: create_token
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        response = {
+            s: 400,
+            m: "error",
+            e: error
+        }
+    }
+
+    res.json(response)
+})
+
+router.get("/token/vertify", async (req, res) => {
+    let response = {};
+
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const vertify = jwt.verify(token, "331040");
+
+        if (vertify.data) {
+            response = {
+                s: 200,
+                m: "vertify success"
+            }
+        } else {
+            response = {
+                s: 400,
+                m: "token vertify error"
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        response = {
+            s: 400,
+            m: "error",
+            e: error
+        }
+    }
+
+    res.json(response)
+})
+
+router.post("/token/signin", async (req, res) => {
+    let response = {};
+
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const vertify = jwt.verify(token, "331040");
+        const identify = req.body.identify;
+        const password = req.body.password
+        const hash_password = createHash("sha256").update(password).digest("hex");
+
+        if (vertify.data) {
+            const find_user = await prisma.users.findFirst({
+                where: {
+                    AND: [
+                        {
+                            OR: [
+                                {
+                                    username: identify
+                                },
+                                {
+                                    email: identify
+                                }
+                            ]
+                        },
+                        {
+                            password: hash_password
+                        },
+                        {
+                            provider: "credential"
+                        }
+                    ]
+                },
+                select: {
+                    email: true,
+                    username: true,
+                    profile_url: true,
+                    create_at: true,
+                    provider: true,
+                    SongHistories: true
+                }
+            })
+
+            const create_access_token = jwt.sign({
+                data: find_user
+            }, "331040");
+
+            if (find_user) {
+                response = {
+                    s: 200,
+                    m: "sign success",
+                    d: {
+                        access_token: create_access_token
+                    }
+                }
+            } else {
+                response = {
+                    s: 404,
+                    m: "not found user"
+                }
+            }
+        } else {
+            response = {
+                s: 400,
+                m: "token vertify error"
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        response = {
+            s: 400,
+            m: "error",
+            e: error
+        }
+    }
+
+    res.json(response)
+})
+
+router.get("/token", async (req, res) => {
+    let response = {}
+
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const vertify_token = jwt.verify(token, "331040");
+
+        if (vertify_token) {
+            response = {
+                s: 200,
+                m: "vertify token success",
+                d: vertify_token.data
+            }
+        } else {
+            response = {
+                s: 400,
+                m: "access token vertify error"
             }
         }
     } catch (error) {

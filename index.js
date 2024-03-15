@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: "https://lofi-318fa.web.app/"
+    origin: ["https://lofi-318fa.web.app", "https://lofip-auth.vercel.app"]
 }))
 app.use(express.static('public'))
 
